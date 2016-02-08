@@ -1,0 +1,24 @@
+{
+  "name": "m-carousel",
+  "homepage": "https://github.com/bpander/m-elements",
+  "authors": [
+    "Brad Anderson <banderso@nerdery.com>"
+  ],
+  "description": "",
+  "main": "MCarousel.js",
+  "moduleType": [],
+  "keywords": [
+    "carousel"
+  ],
+  "license": "BSD",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "motherboard": "0.2.0"
+  }
+}

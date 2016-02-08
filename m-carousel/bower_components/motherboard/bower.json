@@ -1,0 +1,25 @@
+{
+  "name": "motherboard",
+  "homepage": "https://github.com/bpander/motherboard",
+  "authors": [
+    "Brad Anderson <banderso@nerdery.com>"
+  ],
+  "description": "",
+  "main": "Motherboard.js",
+  "moduleType": [],
+  "license": "BSD",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests",
+    "src",
+    "Gruntfile.js"
+  ],
+  "devDependencies": {
+    "requirejs": "2.1.22",
+    "webcomponentsjs": "0.7.20",
+    "matchMedia": "matchmedia#0.3.0"
+  }
+}
