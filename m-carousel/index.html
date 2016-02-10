@@ -1,0 +1,74 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Carousel Demo</title>
+        <style>
+            /* Reset */
+            body {
+                margin: 0;
+            }
+
+            /* Well */
+            .well {
+                padding: 20px;
+            }
+
+            /* Slides */
+            .slide {
+                height: 300px;
+            }
+            .slide_red {
+                background: #d33;
+            }
+            .slide_green {
+                background: #3d3;
+            }
+            .slide_blue {
+                background: #33d;
+            }
+            .slide_purple {
+                background: #d3d;
+            }
+            :focus {
+                box-shadow: 0 0 20px blue;
+            }
+        </style>
+        <link rel="stylesheet" href="m-carousel.css" />
+    </head>
+    <body>
+        
+        <div class="well">
+            <m-carousel class="carousel" slides-visible="2">
+                <ul class="carousel-actuator" data-tag="m-carousel.actuator">
+                    <li>
+                        <div class="slide slide_red">
+                            <a href="#test-1">test-1</a>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="slide slide_green">
+                            <a href="#test-2">test-2</a>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="slide slide_blue">
+                            <a href="#test-3">test-3</a>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="slide slide_purple">
+                            <a href="#test-4">test-4</a>
+                        </div>
+                    </li>
+                </ul>
+                <nav>
+                    <button data-tag="m-carousel.prevButton">Previous</button>
+                    <button data-tag="m-carousel.nextButton">Next</button>
+                </nav>
+            </m-carousel>
+        </div>
+
+        <script src="bower_components/motherboard/Motherboard.js"></script>
+        <script src="MCarousel.js"></script>
+    </body>
+</html>
