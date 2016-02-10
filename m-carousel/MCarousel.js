@@ -39,6 +39,8 @@
 
             this.slides = Array.prototype.slice.call(this.actuator.children);
 
+            this.index = 0;
+
             this.listen(this.prevButton, 'click', this.prev);
             this.listen(this.nextButton, 'click', this.next);
             this.enable();
@@ -54,7 +56,13 @@
 
 
         proto.advance = function (howMany) {
-            console.log('howMany', howMany);
+            var slideWidth = this.clientWidth / this.currentSlidesVisible;
+            this.index = (this.index + howMany) % this.slides.length;
+            if (this.index < 0) {
+                this.index += this.slides.length;
+            }
+            var target = Math.ceil(slideWidth * this.index); // Math.ceil since we can't scroll to have a pixel in a lot of browsers
+            this.actuator.scrollLeft = target;
         };
 
 

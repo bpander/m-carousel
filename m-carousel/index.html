@@ -73,5 +73,12 @@
         <script src="polyfills/CustomEvent.js"></script>
         <script src="bower_components/motherboard/Motherboard.js"></script>
         <script src="MCarousel.js"></script>
+        <script>
+(function () {
+    'use strict';
+
+    window.carousel = document.getElementsByTagName('m-carousel')[0];
+})();
+        </script>
     </body>
 </html>
