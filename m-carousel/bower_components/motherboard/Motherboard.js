@@ -22,7 +22,7 @@ Listener = function () {
     if (this.isEnabled === true) {
       return;
     }
-    if (this.target instanceof EventTarget) {
+    if (this.target.addEventListener !== undefined) {
       this.target.addEventListener(this.type, this.handler);
     } else if (this.target instanceof Array) {
       var i = this.target.length;
@@ -33,7 +33,7 @@ Listener = function () {
     this.isEnabled = true;
   };
   Listener.prototype.disable = function () {
-    if (this.target instanceof EventTarget) {
+    if (this.target.addEventListener !== undefined) {
       this.target.removeEventListener(this.type, this.handler);
     } else if (this.target instanceof Array) {
       var i = this.target.length;
@@ -67,7 +67,7 @@ MediaDef = function () {
       mql.removeListener(this.listener);
     }, this);
     this.mqls = [];
-    if (document.contains(this.element) === false) {
+    if (document.body.contains(this.element) === false) {
       return;
     }
     var prop = this.attrDef.getPropertyName();
@@ -126,7 +126,7 @@ MElementMixin = function (Listener, MediaDef) {
       var mediaDef = this.mediaDefs.find(function (x) {
         return x.attrDef === attrDef;
       });
-      if (mediaDef === undefined || document.contains(this) === false) {
+      if (mediaDef === undefined || document.body.contains(this) === false) {
         return;
       }
       mediaDef.update();

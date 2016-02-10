@@ -22,14 +22,14 @@
     "webcomponentsjs": "0.7.20",
     "matchMedia": "matchmedia#0.3.0"
   },
-  "version": "0.2.0",
-  "_release": "0.2.0",
+  "version": "0.2.1",
+  "_release": "0.2.1",
   "_resolution": {
     "type": "version",
-    "tag": "0.2.0",
-    "commit": "6b17e44d3573b254d3638536eed9b4e2c25cd848"
+    "tag": "0.2.1",
+    "commit": "93dc41828fed34968666408af9d1e5a056dfe29e"
   },
   "_source": "git://github.com/bpander/motherboard.git",
-  "_target": "0.2.0",
+  "_target": "0.2.1",
   "_originalSource": "motherboard"
 }
