@@ -1,13 +1,14 @@
 (function (root, factory) {
     if (typeof define === 'function' && define.amd) {
         // AMD. Register as an anonymous module.
-        define(['motherboard'], factory);
+        define(['motherboard', 'tween.js'], factory);
     } else {
         // Browser globals
-        root.MCarousel = factory(root.M);
+        root.MCarousel = factory(root.M, root.TWEEN);
     }
-}(this, function (M) {
+}(this, function (M, TWEEN) {
     'use strict';
+
 
     return M.element('m-carousel', function (proto, base) {
 
@@ -23,6 +24,23 @@
                 type: Number,
                 responsive: true,
                 default: '1'
+            }),
+
+            M.attribute('autoplay', { type: Boolean }),
+
+            M.attribute('easing', {
+                type: String,
+                default: 'linear'
+            }),
+
+            M.attribute('speed', {
+                type: Number,
+                default: 500
+            }),
+
+            M.attribute('delay', {
+                type: Number,
+                default: 7000
             })
 
         );
@@ -62,7 +80,20 @@
                 this.index += this.slides.length;
             }
             var target = Math.ceil(slideWidth * this.index); // Math.ceil since we can't scroll to have a pixel in a lot of browsers
-            this.actuator.scrollLeft = target;
+            var tween = new TWEEN.Tween({ scrollLeft: this.actuator.scrollLeft });
+            tween.to({ scrollLeft: target }, 500);
+            tween.easing(TWEEN.Easing.Cubic.InOut);
+            var actuator = this.actuator;
+            tween.onUpdate(function () {
+                console.log(this);
+                actuator.scrollLeft = this.scrollLeft
+            });
+            tween.start();
+            var animate = function (time) {
+                requestAnimationFrame(animate);
+                TWEEN.update(time);
+            };
+            requestAnimationFrame(animate);
         };
 
 
