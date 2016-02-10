@@ -28,14 +28,15 @@
 
             M.attribute('autoplay', { type: Boolean }),
 
+            // TODO: Implement this
             M.attribute('easing', {
                 type: String,
-                default: 'linear'
+                default: 'TWEEN.Easing.Cubic.InOut'
             }),
 
             M.attribute('speed', {
                 type: Number,
-                default: 500
+                default: 1500
             }),
 
             M.attribute('delay', {
@@ -59,8 +60,6 @@
 
             this.position = { x: 0 };
 
-            this.tween = null;
-
             this.rafId = 0;
 
             this.index = 0;
@@ -69,6 +68,12 @@
             this.handleAnimationFrame = proto.handleAnimationFrame.bind(this);
             this.handleTweenComplete = proto.handleTweenComplete.bind(this);
             this.handleTweenUpdate = proto.handleTweenUpdate.bind(this);
+
+            this.tween = new TWEEN.Tween(this.position);
+            this.tween
+                .easing(TWEEN.Easing.Cubic.InOut)
+                .onUpdate(this.handleTweenUpdate)
+                .onComplete(this.handleTweenComplete);
 
             this.listen(this.prevButton, 'click', this.prev);
             this.listen(this.nextButton, 'click', this.next);
@@ -90,9 +95,7 @@
 
             // Stop the animation if it's happening
             cancelAnimationFrame(this.rafId);
-            if (this.tween !== null) {
-                this.tween.stop();
-            }
+            this.tween.stop();
 
             // Update the active index
             this.index = (this.index + howMany) % this.slides.length;
@@ -102,15 +105,9 @@
 
             // Do some math and get the tween going
             var slideWidth = this.clientWidth / this.currentSlidesVisible;
-            var target = Math.ceil(slideWidth * this.index); // Math.ceil since we can't scroll to have a pixel in a lot of browsers
-
-            this.position.x = this.actuator.scrollLeft;
-            this.tween = new TWEEN.Tween(this.position);
-            this.tween.to({ x: target }, this.speed)
-                .easing(TWEEN.Easing.Cubic.InOut) // TODO: Figure out how to pass in easing via attribute, e.g. `easing="Cubic.InOut"`
-                .onUpdate(this.handleTweenUpdate)
-                .onComplete(this.handleTweenComplete)
-                .start();
+            var target = { x: Math.ceil(slideWidth * this.index) }; // Math.ceil since we can't scroll to have a pixel in a lot of browsers
+            this.tween.to(target, this.speed);
+            this.tween.start();
             this.rafId = requestAnimationFrame(this.handleAnimationFrame);
         };
 
