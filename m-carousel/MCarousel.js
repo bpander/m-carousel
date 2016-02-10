@@ -57,7 +57,18 @@
 
             this.slides = Array.prototype.slice.call(this.actuator.children);
 
+            this.position = { x: 0 };
+
+            this.tween = null;
+
+            this.rafId = 0;
+
             this.index = 0;
+
+            // Create copies of the tween event handlers bound to this instance
+            this.handleAnimationFrame = proto.handleAnimationFrame.bind(this);
+            this.handleTweenComplete = proto.handleTweenComplete.bind(this);
+            this.handleTweenUpdate = proto.handleTweenUpdate.bind(this);
 
             this.listen(this.prevButton, 'click', this.prev);
             this.listen(this.nextButton, 'click', this.next);
@@ -67,33 +78,40 @@
 
         proto.attachedCallback = function () {
             base.attachedCallback.call(this);
+
+            var slideWidth = 1 / this.currentSlidesVisible * 100 + '%';
             this.slides.forEach(function (slide) {
-                slide.style.width = 1 / this.currentSlidesVisible * 100 + '%';
+                slide.style.width = slideWidth
             }, this);
         };
 
 
         proto.advance = function (howMany) {
-            var slideWidth = this.clientWidth / this.currentSlidesVisible;
+
+            // Stop the animation if it's happening
+            cancelAnimationFrame(this.rafId);
+            if (this.tween !== null) {
+                this.tween.stop();
+            }
+
+            // Update the active index
             this.index = (this.index + howMany) % this.slides.length;
             if (this.index < 0) {
                 this.index += this.slides.length;
             }
+
+            // Do some math and get the tween going
+            var slideWidth = this.clientWidth / this.currentSlidesVisible;
             var target = Math.ceil(slideWidth * this.index); // Math.ceil since we can't scroll to have a pixel in a lot of browsers
-            var tween = new TWEEN.Tween({ scrollLeft: this.actuator.scrollLeft });
-            tween.to({ scrollLeft: target }, 500);
-            tween.easing(TWEEN.Easing.Cubic.InOut);
-            var actuator = this.actuator;
-            tween.onUpdate(function () {
-                console.log(this);
-                actuator.scrollLeft = this.scrollLeft
-            });
-            tween.start();
-            var animate = function (time) {
-                requestAnimationFrame(animate);
-                TWEEN.update(time);
-            };
-            requestAnimationFrame(animate);
+
+            this.position.x = this.actuator.scrollLeft;
+            this.tween = new TWEEN.Tween(this.position);
+            this.tween.to({ x: target }, this.speed)
+                .easing(TWEEN.Easing.Cubic.InOut) // TODO: Figure out how to pass in easing via attribute, e.g. `easing="Cubic.InOut"`
+                .onUpdate(this.handleTweenUpdate)
+                .onComplete(this.handleTweenComplete)
+                .start();
+            this.rafId = requestAnimationFrame(this.handleAnimationFrame);
         };
 
 
@@ -104,6 +122,22 @@
 
         proto.next = function () {
             this.advance(this.currentSlidesScrolled);
+        };
+
+
+        proto.handleAnimationFrame = function (time) {
+            this.rafId = requestAnimationFrame(this.handleAnimationFrame);
+            this.tween.update(time);
+        };
+
+
+        proto.handleTweenComplete = function () {
+            cancelAnimationFrame(this.rafId);
+        };
+
+
+        proto.handleTweenUpdate = function () {
+            this.actuator.scrollLeft = this.position.x;
         };
 
     });
